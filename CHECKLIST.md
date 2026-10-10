@@ -9,6 +9,7 @@
 - [x] Define project root metadata and safe project/card slug rules.
 - [x] Add automatic desktop project-folder persistence, SQLite metadata index, and manual project-folder export (browser folder writing uses File System Access API where supported).
 - [x] Add project creation, open, rename, archive, and restore-from-JSON-backup flows.
+- [x] Provide a guided, sectioned animation-card creation form with editable key poses and playback settings.
 - [x] Set new-project default sprite canvas to 64×64.
 - [x] Offer 128×128, 512×512, and custom size options.
 - [x] Make card size inherit project default, with a per-card override.
