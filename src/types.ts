@@ -204,6 +204,9 @@ export type GenerationJob = {
   projectId: string;
   cardId?: string;
   providerProfileId: string;
+  // Overrides the provider profile's default image model for this job only
+  // (e.g. picking a specific model in the AI touch-up dialog).
+  imageModel?: string;
   anchorVersionId?: string;
   status: GenerationStatus;
   target: "anchor" | "asset" | "animation-frame" | "inbetween-frame" | "frame-edit" | "video-animation";

@@ -54,6 +54,7 @@ export function useGenerationJobs({
   function makeGenerationJob(args: {
     project: StudioProject;
     provider: ProviderProfile;
+    imageModel?: string;
     card?: StudioProject["cards"][number];
     prompt: string;
     dimensions: CanvasSize;
@@ -75,6 +76,7 @@ export function useGenerationJobs({
       projectId: args.project.id,
       cardId: args.card?.id,
       providerProfileId: args.provider.id,
+      ...(args.imageModel ? { imageModel: args.imageModel } : {}),
       anchorVersionId: args.anchorVersionId,
       frameIndex: args.frameIndex,
       phaseId: args.phaseId,
@@ -120,7 +122,10 @@ export function useGenerationJobs({
   async function runGeneration(original: GenerationJob): Promise<boolean> {
     const controller = new AbortController();
     generationControllers.current.set(original.id, controller);
-    const provider = providerProfiles.find((profile) => profile.id === original.providerProfileId);
+    const profile = providerProfiles.find((profile) => profile.id === original.providerProfileId);
+    // A per-job model choice (e.g. from the AI touch-up dialog) overrides the profile's default image model
+    // without changing the profile itself, so the global Topbar selection is untouched.
+    const provider = profile && original.imageModel ? { ...profile, imageModel: original.imageModel } : profile;
     const currentProjects = projectsRef.current;
     const project = currentProjects.find((item) => item.id === original.projectId);
     if (!provider || !project) {

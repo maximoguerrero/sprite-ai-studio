@@ -1,0 +1,566 @@
+{
+  "aseprite": {
+    "product": "https://www.aseprite.org/",
+    "query": "\"aseprite\" editor interface screenshot ui",
+    "kept": [
+      {
+        "file": "aseprite-1.png",
+        "w": 2400,
+        "h": 1602,
+        "bytes": 336227,
+        "img": "https://images.ctfassets.net/fczckc3dt6mv/5ZbLJhBOCg00VcaWExJ4se/fe78c291f955fe7139cc6bfe5435ca24/aseprite-interface.png?w=2400&q=80",
+        "page": "https://www.aseprite.org/",
+        "seed": true
+      },
+      {
+        "file": "aseprite-2.png",
+        "w": 1920,
+        "h": 1054,
+        "bytes": 43276,
+        "img": "https://ilkke.net/heartfolio/assets/images/aseprite-screenshot-3-ui-1920x1054.png",
+        "page": "https://www.aseprite.org/",
+        "seed": true
+      },
+      {
+        "file": "aseprite-3.jpg",
+        "w": 1347,
+        "h": 651,
+        "bytes": 140525,
+        "img": "https://images.wondershare.com/filmora/article-images/2021/pixel-art-maker-aseprite.jpg",
+        "page": "https://narodnatribuna.info/lists/a/aseprite-animated-sprite-editor-pixel-art-tool/",
+        "seed": false
+      }
+    ]
+  },
+  "pixelmator-pro": {
+    "product": "https://www.apple.com/pixelmator-pro/",
+    "query": "\"pixelmator pro\" interface dark mode screenshot",
+    "kept": [
+      {
+        "file": "pixelmator-pro-1.png",
+        "w": 3930,
+        "h": 2182,
+        "bytes": 7536851,
+        "img": "https://cdn.macstories.net/001/2018-10-17-09-10-25.png",
+        "page": "https://www.apple.com/pixelmator-pro/",
+        "seed": true
+      }
+    ],
+    "harvested": [
+      {
+        "file": "pixelmator-pro-doc-1.jpg",
+        "w": 1440,
+        "h": 900,
+        "bytes": 122805,
+        "img": "https://www.apple.com/v/pixelmator-pro/a/images/overview/welcome/hero_endframe__ecdif99jtfsm_large.jpg",
+        "page": "https://www.apple.com/pixelmator-pro/"
+      },
+      {
+        "file": "pixelmator-pro-doc-2.jpg",
+        "w": 1440,
+        "h": 900,
+        "bytes": 241249,
+        "img": "https://www.apple.com/v/pixelmator-pro/a/images/overview/welcome/hero_startframe__p52c69kczz22_large.jpg",
+        "page": "https://www.apple.com/pixelmator-pro/"
+      },
+      {
+        "file": "pixelmator-pro-doc-3.png",
+        "w": 3930,
+        "h": 2182,
+        "bytes": 7536851,
+        "img": "https://cdn.macstories.net/001/2018-10-17-09-10-25.png",
+        "page": "https://www.macstories.net/reviews/pixelmator-pro-updated-with-machine-learning-auto-enhancement-light-and-dark-modes-and-automator-actions/"
+      },
+      {
+        "file": "pixelmator-pro-doc-4.png",
+        "w": 3416,
+        "h": 1878,
+        "bytes": 3179025,
+        "img": "https://cdn.macstories.net/001/2018-10-17-09-20-47.png",
+        "page": "https://www.macstories.net/reviews/pixelmator-pro-updated-with-machine-learning-auto-enhancement-light-and-dark-modes-and-automator-actions/"
+      }
+    ]
+  },
+  "rive": {
+    "product": "https://rive.app/docs/editor/interface-overview/overview",
+    "query": "\"rive\" editor interface overview screenshot",
+    "kept": [
+      {
+        "file": "rive-1.jpg",
+        "w": 2244,
+        "h": 2904,
+        "bytes": 748816,
+        "img": "https://i.etsystatic.com/28660391/r/il/ded00e/4307640968/il_fullxfull.4307640968_dg4l.jpg",
+        "page": "https://qaqooking.wiki/all/coloring/scotland-coloring-pages-printable",
+        "seed": false
+      },
+      {
+        "file": "rive-2.jpg",
+        "w": 1275,
+        "h": 1650,
+        "bytes": 238180,
+        "img": "https://www.thecatholickid.com/wp-content/uploads/saint-margaret-of-scotland-coloring-page-cnt-mls.jpg",
+        "page": "https://fity.club/lists/suggestions/saint-margaret-catholic-coloring-page/",
+        "seed": false
+      },
+      {
+        "file": "rive-3.jpg",
+        "w": 1080,
+        "h": 1080,
+        "bytes": 154598,
+        "img": "https://i.etsystatic.com/16211734/r/il/2e7ee7/2663500706/il_1080xN.2663500706_hii4.jpg",
+        "page": "https://www.etsy.com/listing/891288754/saint-margaret-of-scotland-coloring-page",
+        "seed": false
+      }
+    ],
+    "harvested": [
+      {
+        "file": "rive-doc-1.png",
+        "w": 2398,
+        "h": 1347,
+        "bytes": 190592,
+        "img": "https://mintcdn.com/rive/ULGq_e0qXzI4ZK9X/images/editor/interface/file-browser.png?fit=max&auto=format&n=ULGq_e0qXzI4ZK9X&q=85&s=24a100c1051b1f7400255a350048ee75",
+        "page": "https://rive.app/docs/editor/interface-overview/overview"
+      },
+      {
+        "file": "rive-doc-2.png",
+        "w": 3728,
+        "h": 2438,
+        "bytes": 1271062,
+        "img": "https://mintcdn.com/rive/UizvjHP7hhSBQqPg/images/interface/toolbar.png?fit=max&auto=format&n=UizvjHP7hhSBQqPg&q=85&s=822c990c42cdf1c7c57ff2223f6187d3",
+        "page": "https://rive.app/docs/editor/interface-overview/overview"
+      }
+    ]
+  },
+  "jitter": {
+    "product": "https://jitter.video/",
+    "query": "\"jitter.video\" OR \"jitter\" motion design editor interface",
+    "kept": [
+      {
+        "file": "jitter-1.jpg",
+        "w": 3310,
+        "h": 2483,
+        "bytes": 1292845,
+        "img": "https://fivethirtyeight.com/wp-content/uploads/2016/07/gettyimages-545683446.jpg",
+        "page": "http://fivethirtyeight.com/features/serena-williams-wins-wimbledon-ties-grafs-majors-record-thanks-to-a-remarkable-run-in-her-30s/",
+        "seed": false
+      }
+    ]
+  },
+  "cavalry": {
+    "product": "https://cavalrygraphics.com/",
+    "query": "\"cavalry\" motion design software interface screenshot",
+    "kept": [
+      {
+        "file": "cavalry-1.png",
+        "w": 1920,
+        "h": 1080,
+        "bytes": 1145812,
+        "img": "https://content-management-files.canva.com/84af5b71-6fe2-4084-b633-8cd719dd2a38/CavalryUI.png",
+        "page": "https://cavalrygraphics.com/",
+        "seed": true
+      },
+      {
+        "file": "cavalry-2.jpg",
+        "w": 1181,
+        "h": 787,
+        "bytes": 1388417,
+        "img": "http://upload.wikimedia.org/wikipedia/commons/e/ea/Flickr_-_The_U.S._Army_-_'cavalry_charge'.jpg",
+        "page": "http://en.wikipedia.org/wiki/File:Flickr_-_The_U.S._Army_-_'cavalry_charge'.jpg",
+        "seed": false
+      },
+      {
+        "file": "cavalry-3.jpg",
+        "w": 1300,
+        "h": 1271,
+        "bytes": 357412,
+        "img": "https://c8.alamy.com/comp/BKCA58/riding-toward-the-battle-union-cavalry-soldiers-ride-toward-yet-another-BKCA58.jpg",
+        "page": "https://www.alamy.com/stock-photo-riding-toward-the-battle-union-cavalry-soldiers-ride-toward-yet-another-29160244.html",
+        "seed": false
+      }
+    ]
+  },
+  "photopea": {
+    "product": "https://www.photopea.com/",
+    "query": "\"photopea\" interface screenshot dark panels",
+    "kept": [
+      {
+        "file": "photopea-1.jpg",
+        "w": 1280,
+        "h": 800,
+        "bytes": 152420,
+        "img": "https://artsiansblog.com/wp-content/uploads/2023/02/unnamed.jpg",
+        "page": "https://artsiansblog.com/transform-your-images-with-photopea-the-online-photo-editor/",
+        "seed": false
+      },
+      {
+        "file": "photopea-2.png",
+        "w": 1366,
+        "h": 768,
+        "bytes": 1179703,
+        "img": "https://p16-seeyou-useast5.capcutcdn-us.com/tos-useast5-i-2zwwjm3azk-tx/3a132710afa74ce681bf6ce7d61a429c~tplv-2zwwjm3azk-image.image",
+        "page": "https://www.capcut.com/resource/photopea-online-photo-editor",
+        "seed": false
+      },
+      {
+        "file": "photopea-3.png",
+        "w": 1024,
+        "h": 590,
+        "bytes": 84227,
+        "img": "https://easywithai.com/storage/2023/12/Photopea-1024x590.png",
+        "page": "https://easywithai.com/ai-image-editors/photopea/",
+        "seed": false
+      }
+    ]
+  },
+  "godot": {
+    "product": "https://godotengine.org/",
+    "query": "\"godot engine\" 4 editor interface screenshot dark",
+    "kept": [
+      {
+        "file": "godot-1.jpg",
+        "w": 2500,
+        "h": 3333,
+        "bytes": 760618,
+        "img": "https://images.squarespace-cdn.com/content/v1/5da5efee465c426381fa3a2c/1699818345106-LS0DOORU1J3BTSEM4Z8D/423B9A98-B10A-4AA8-9BEE-4F160497B02E_1_201_a.jpg",
+        "page": "https://fity.club/lists/suggestions/emily-wickersham-brokarakteren/",
+        "seed": false
+      },
+      {
+        "file": "godot-2.jpg",
+        "w": 1200,
+        "h": 674,
+        "bytes": 110123,
+        "img": "https://hips.hearstapps.com/hmg-prod/images/emily-wickersham-as-agent-eleanor-bishop-ncis-new-orleans-1655204869.jpg?crop=0.676xw:0.571xh;0.324xw,0.0631xh&resize=1200:*",
+        "page": "https://www.digitalspy.com/tv/ustv/a44548940/ncis-emily-wickersham-hair-transformation/",
+        "seed": false
+      },
+      {
+        "file": "godot-3.jpg",
+        "w": 1600,
+        "h": 902,
+        "bytes": 467006,
+        "img": "https://www.thelist.com/img/gallery/emily-wickersham-says-this-was-the-most-difficult-ncis-episode/l-intro-1637799111.jpg",
+        "page": "https://www.thelist.com/670394/emily-wickersham-says-this-was-the-most-difficult-ncis-episode/",
+        "seed": false
+      }
+    ],
+    "harvested": [
+      {
+        "file": "godot-doc-1.webp",
+        "w": 1655,
+        "h": 843,
+        "bytes": 62086,
+        "img": "https://godotengine.org/assets/features/editor-frame.webp?2",
+        "page": "https://godotengine.org/features/"
+      },
+      {
+        "file": "godot-doc-2.webp",
+        "w": 1920,
+        "h": 1080,
+        "bytes": 238578,
+        "img": "https://godotengine.org/assets/showcase/halls-of-torment-1.webp",
+        "page": "https://godotengine.org/features/"
+      }
+    ]
+  },
+  "blender": {
+    "product": "https://www.blender.org/",
+    "query": "\"blender\" 4.x interface layout screenshot editor",
+    "kept": [
+      {
+        "file": "blender-1.png",
+        "w": 1303,
+        "h": 1024,
+        "bytes": 152779,
+        "img": "https://developer.blender.org/docs/release_notes/4.4/images/studio_lights_editor_layout.png",
+        "page": "https://www.blender.org/",
+        "seed": true
+      },
+      {
+        "file": "blender-2.jpg",
+        "w": 1920,
+        "h": 1080,
+        "bytes": 795898,
+        "img": "https://www.blender.org/wp-content/uploads/2020/06/blender_283_social.jpg",
+        "page": "https://www.blender.org/download/lts/2-83/",
+        "seed": false
+      },
+      {
+        "file": "blender-3.png",
+        "w": 1200,
+        "h": 680,
+        "bytes": 102717,
+        "img": "https://promptsheaven.com/wp-content/uploads/2023/07/3D-modeling-in-blender.png",
+        "page": "https://happeningdellasolidarieta.org/depth-3d-modeling-can-we-convert-a-depthmap-to-a-3dmodelpart1/",
+        "seed": false
+      }
+    ],
+    "harvested": [
+      {
+        "file": "blender-doc-1.png",
+        "w": 1303,
+        "h": 1024,
+        "bytes": 152779,
+        "img": "https://developer.blender.org/docs/release_notes/4.4/images/studio_lights_editor_layout.png",
+        "page": "https://developer.blender.org/docs/release_notes/4.4/user_interface/"
+      },
+      {
+        "file": "blender-doc-2.png",
+        "w": 1876,
+        "h": 841,
+        "bytes": 487324,
+        "img": "https://developer.blender.org/docs/release_notes/4.4/images/macos_color_picking_outside_windows.png",
+        "page": "https://developer.blender.org/docs/release_notes/4.4/user_interface/"
+      }
+    ]
+  },
+  "affinity-photo": {
+    "product": "https://affinity.serif.com/",
+    "query": "\"affinity photo 2\" interface screenshot dark",
+    "kept": [
+      {
+        "file": "affinity-photo-1.png",
+        "w": 2000,
+        "h": 1250,
+        "bytes": 4254991,
+        "img": "https://cdn.serif.com/affinity/img/learn/quickstart/photo/photo-desktop-header-280920231547--lg@2x.png",
+        "page": "https://affinity.serif.com/",
+        "seed": true
+      },
+      {
+        "file": "affinity-photo-2.jpg",
+        "w": 1200,
+        "h": 628,
+        "bytes": 83052,
+        "img": "https://media.okmagazine.com/brand-img/cbcRU_pxT/1600x838/kimberly-guilfoyle-and-donald-trump-jr-10-1733893559586.jpg",
+        "page": "https://okmagazine.com/p/kimberly-guilfoyle-donald-trump-jr-relationship-timeline/",
+        "seed": false
+      },
+      {
+        "file": "affinity-photo-3.jpg",
+        "w": 2000,
+        "h": 1332,
+        "bytes": 174369,
+        "img": "https://resize-parismatch.lanmedia.fr/var/pm/public/media/image/2022/03/02/11/Donald-Trump-Jr-et-Kimberly-Guilfoyle-font-campagne-en-Georgie.jpg?VersionId=WlB5jVB.22jopTqRjsk8BkUk.8A57sN9",
+        "page": "https://www.parismatch.com/Actu/International/Donald-Trump-Jr-et-Kimberly-Guilfoyle-font-campagne-en-Georgie-1717859",
+        "seed": false
+      }
+    ]
+  },
+  "linear": {
+    "product": "https://linear.app/",
+    "query": "\"linear.app\" interface screenshot dark issue",
+    "kept": [
+      {
+        "file": "linear-1.png",
+        "w": 2352,
+        "h": 1656,
+        "bytes": 352888,
+        "img": "https://cdn.sanity.io/images/ornj730p/production/4440f7f7cd02950e5e71be841b9cdbf20ec7a9c5-2352x1656.png?q=95&auto=format",
+        "page": "https://linear.app/",
+        "seed": true
+      },
+      {
+        "file": "linear-2.png",
+        "w": 1094,
+        "h": 766,
+        "bytes": 295596,
+        "img": "https://cdn.sanity.io/images/ornj730p/production/1c2f3f91189293781b8173e4440e5f9f4501645a-1094x766.png?q=95&auto=format",
+        "page": "https://linear.app/",
+        "seed": true
+      },
+      {
+        "file": "linear-3.png",
+        "w": 1500,
+        "h": 1000,
+        "bytes": 18067,
+        "img": "https://brighterly.com/wp-content/uploads/2023/12/Example-of-linear-graph.png",
+        "page": "https://infoupdate.org/how-to-make-a-curved-graph-linear/",
+        "seed": false
+      }
+    ]
+  },
+  "raycast": {
+    "product": "https://www.raycast.com/",
+    "query": "\"raycast\" launcher interface screenshot dark theme",
+    "kept": [
+      {
+        "file": "raycast-1.png",
+        "w": 1920,
+        "h": 1200,
+        "bytes": 397583,
+        "img": "https://manual.raycast.com/_next/image?url=https%3A%2F%2Ffz1sd71lwhbqy6sh.public.blob.vercel-storage.com%2Fraycast%2Fimages%2Fapp%2Fthemes%2Fmac-root-dark.png&w=1920&q=75",
+        "page": "https://www.raycast.com/",
+        "seed": true
+      },
+      {
+        "file": "raycast-2.webp",
+        "w": 1000,
+        "h": 1000,
+        "bytes": 91890,
+        "img": "https://cdn11.bigcommerce.com/s-m7gczl773t/images/stencil/original/products/1122/2855/red-by-kiss-silky-satin-durag-black-packaging.jpg__72838.1768857503.jpg",
+        "page": "https://weissbarbersupply.com/red-by-kiss-premium-silky-satin-durag-updating/",
+        "seed": false
+      }
+    ]
+  },
+  "figma": {
+    "product": "https://www.figma.com/",
+    "query": "\"figma\" editor interface canvas layers panel screenshot",
+    "kept": [
+      {
+        "file": "figma-1.png",
+        "w": 3840,
+        "h": 2160,
+        "bytes": 26787,
+        "img": "https://cdn.prod.website-files.com/66ccf78be99d9f56e3f51096/67b85fd83b639ae7fbe30f39_KIBOcpbofz1q_jSUw4t3ZLNkY1fsK8YyLj3JvUzMXdU.png",
+        "page": "https://www.guideflow.com/tutorial/how-to-resize-the-image-in-figma",
+        "seed": false
+      },
+      {
+        "file": "figma-2.png",
+        "w": 3840,
+        "h": 1980,
+        "bytes": 944241,
+        "img": "https://s3-alpha.figma.com/hub/file/2652784029/32d26aff-b743-47e4-8943-edfe5a18b685-cover.png",
+        "page": "https://www.figma.com/community/file/1177157072133994306/design-system-ui-ux-kit-figma",
+        "seed": false
+      },
+      {
+        "file": "figma-3.jpg",
+        "w": 1280,
+        "h": 720,
+        "bytes": 28085,
+        "img": "https://images.ctfassets.net/vx2fw5lk485m/32EjrlyBYflHkiT5jrqfZh/9b6a5f743352fbaa37a1976f22fb2d37/______-6.Figma-______.jpg",
+        "page": "https://pop.autism-unravelled.org/figma-figma-ai-figma\u30a2\u30ab\u30a6\u30f3\u30c8\u306e\u4f5c\u6210/",
+        "seed": false
+      }
+    ],
+    "harvested": [
+      {
+        "file": "figma-doc-1.png",
+        "w": 1080,
+        "h": 864,
+        "bytes": 121598,
+        "img": "https://cdn.sanity.io/images/599r6htc/regionalized/43fc110aab92aa1a4582bad2a0d16652685dd8e9-1080x864.png?w=1080&h=864&q=75&fit=max&auto=format",
+        "page": "https://www.figma.com/enterprise/"
+      },
+      {
+        "file": "figma-doc-2.png",
+        "w": 1080,
+        "h": 864,
+        "bytes": 76183,
+        "img": "https://cdn.sanity.io/images/599r6htc/regionalized/bef49ee11a9341bc8350938f75747fd9878fc241-1080x864.png?w=1080&h=864&q=75&fit=max&auto=format",
+        "page": "https://www.figma.com/enterprise/"
+      }
+    ]
+  },
+  "spline": {
+    "product": "https://spline.design/",
+    "query": "\"spline.design\" 3d editor interface screenshot",
+    "kept": [
+      {
+        "file": "spline-1.png",
+        "w": 2508,
+        "h": 1360,
+        "bytes": 962839,
+        "img": "https://d33wubrfki0l68.cloudfront.net/d1e95826da65f8f8ad2184af7ab9ff3d7a2610cd/24f6e/_assets/_images/spline_app_ui_03.png",
+        "page": "https://spline.design/",
+        "seed": true
+      },
+      {
+        "file": "spline-2.jpg",
+        "w": 1000,
+        "h": 700,
+        "bytes": 395686,
+        "img": "https://www.oris-industrial.com/wp-content/uploads/2023/09/splines-2-1024x684-1.jpg",
+        "page": "https://www.oris-industrial.com/choosing-the-right-spline-shaft-a-comprehensive-guide/",
+        "seed": false
+      },
+      {
+        "file": "spline-3.jpg",
+        "w": 1632,
+        "h": 1224,
+        "bytes": 854075,
+        "img": "http://www.riten.com/wp-content/uploads/2014/04/splines.jpg",
+        "page": "https://storage.googleapis.com/dcsfuszogmmime/what-is-the-purpose-of-the-spline.html",
+        "seed": false
+      }
+    ],
+    "harvested": [
+      {
+        "file": "spline-doc-1.webp",
+        "w": 1304,
+        "h": 842,
+        "bytes": 126846,
+        "img": "https://spline.design/images/templates/retrofuturism.webp",
+        "page": "https://spline.design/"
+      },
+      {
+        "file": "spline-doc-2.webp",
+        "w": 1304,
+        "h": 842,
+        "bytes": 135260,
+        "img": "https://spline.design/images/templates/op1.webp",
+        "page": "https://spline.design/"
+      }
+    ]
+  },
+  "procreate": {
+    "product": "https://procreate.com/ipad",
+    "query": "\"procreate\" interface layers canvas screenshot",
+    "kept": [
+      {
+        "file": "procreate-1.jpg",
+        "w": 1734,
+        "h": 1300,
+        "bytes": 282226,
+        "img": "https://procreate-assets-cdn.procreate.art/img/whats-new-2_en.60908c4.jpg",
+        "page": "https://procreate.com/ipad",
+        "seed": true
+      },
+      {
+        "file": "procreate-2.jpg",
+        "w": 1800,
+        "h": 945,
+        "bytes": 332056,
+        "img": "https://procreate-assets-cdn.procreate.art/img/ipad_en.defad87.jpg",
+        "page": "https://procreate.com/procreate",
+        "seed": false
+      },
+      {
+        "file": "procreate-3.jpg",
+        "w": 3752,
+        "h": 1876,
+        "bytes": 267959,
+        "img": "https://procreate-assets-cdn.procreate.com/assets/procreate-hero-lg_en.sTfn7OBJ.jpg",
+        "page": "https://procreate.com/procreate",
+        "seed": false
+      }
+    ]
+  },
+  "tldraw": {
+    "product": "https://www.tldraw.com/",
+    "query": "\"tldraw\" editor interface screenshot",
+    "kept": [],
+    "harvested": [
+      {
+        "file": "tldraw-doc-1.png",
+        "w": 1200,
+        "h": 723,
+        "bytes": 490094,
+        "img": "https://cdn.sanity.io/images/ij3ytvrl/production/4dd9767bfd9548f4e38d45bdb96bc3611d3624bf-1361x820.png?w=1200&fit=max",
+        "page": "https://tldraw.dev/"
+      },
+      {
+        "file": "tldraw-doc-2.png",
+        "w": 1111,
+        "h": 659,
+        "bytes": 188645,
+        "img": "https://cdn.sanity.io/images/ij3ytvrl/production/591e7967d63dc096c1887f99bb869ff6a99cc934-1111x659.png?w=1200&fit=max",
+        "page": "https://tldraw.dev/"
+      }
+    ]
+  }
+}

@@ -90,3 +90,13 @@ Biggest risk: keeping preview/export parity — mitigated by routing every frame
 - [x] `frame-edit` target in types + schema
 - [x] `touchUpFrameWithAI` (reference = current frame, gated on imageToImage)
 - [x] Success attaches `editImageKey`, original preserved
+
+### Phase 6 — Per-job model choice (follow-up)
+
+Pick the provider/model for each AI touch-up from the list of image-edit-capable models across configured providers, instead of being locked to the global Topbar selection.
+
+- [x] `imageModel?: string` on `GenerationJob` + `generationJobSchema` (per-job override, no migration)
+- [x] `useImageModelCatalog` groups carry an `imageToImage` capability flag
+- [x] `runGeneration` applies the override via a shallow-cloned profile, leaving the profile + global selection untouched
+- [x] `touchUpFrameWithAI(card, frame, instruction, override?)` resolves provider + model from the choice
+- [x] AI touch-up dialog model picker lists only edit-capable providers; submit gated on a valid choice

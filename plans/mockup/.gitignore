@@ -1,0 +1,4 @@
+# raw scrape candidates: provenance only, regenerable with tools/gather_refs.py
+sources/*.png
+sources/*.jpg
+sources/*.webp

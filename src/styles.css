@@ -6124,6 +6124,22 @@ input[type="radio"]:disabled {
   color: #929288;
   font: 9px var(--mono);
 }
+.ai-touchup-model span {
+  color: #85857b;
+  font-size: 9px;
+  line-height: 1.5;
+}
+.generation-confirm-message {
+  margin: 0 0 4px;
+  color: #c9c9bf;
+  font-size: 11px;
+  line-height: 1.55;
+}
+.generation-confirm-model span {
+  color: #85857b;
+  font-size: 9px;
+  line-height: 1.5;
+}
 .frame-thumb .touch-up-frame {
   position: absolute;
   z-index: 3;

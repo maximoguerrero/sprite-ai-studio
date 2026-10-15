@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from "react";
 import type { AnimationVersion, ProviderProfile, StudioCard, StudioFrame, StudioProject } from "../types";
 import { activeFrameImageKey } from "../types";
 import type { AppView } from "../components/Sidebar";
+import type { ImageModelRequirement } from "../hooks/useImageModelCatalog";
 import { loadImage, saveImage } from "../imageStore";
 import { normalizedCanvas, resolveCardCanvas } from "../productFoundation";
 import { getProviderSecret } from "../providerSecrets";
@@ -13,6 +14,15 @@ import type { useGenerationJobs } from "./useGenerationJobs";
 
 type JobHelpers = Pick<ReturnType<typeof useGenerationJobs>, "makeGenerationJob" | "enqueueGeneration">;
 
+// Opens the shared confirm dialog (with a model picker) and resolves the chosen provider/model,
+// or null if the user cancels. The chosen model overrides the global selection for this job only.
+type ConfirmGeneration = (options: {
+  title?: string;
+  message: string;
+  requirement?: ImageModelRequirement;
+  actionLabel?: string;
+}) => Promise<{ provider: ProviderProfile; model: string } | null>;
+
 export function useGenerationActions({
   activeProject,
   activeProvider,
@@ -20,6 +30,7 @@ export function useGenerationActions({
   setFoundationNotice,
   setProviderMessage,
   updateCard,
+  confirmGeneration,
   makeGenerationJob,
   enqueueGeneration,
 }: {
@@ -29,19 +40,21 @@ export function useGenerationActions({
   setFoundationNotice: (message: string) => void;
   setProviderMessage: (message: string) => void;
   updateCard: (projectId: string, cardId: string, update: (card: StudioCard) => StudioCard) => void;
+  confirmGeneration: ConfirmGeneration;
 } & JobHelpers) {
   async function generateAnchor(prompt: string) {
-    if (!activeProject || !activeProvider) return;
-    if (
-      !window.confirm(
-        `Generate an anchor with ${activeProvider.name} / ${activeProvider.imageModel ?? activeProvider.model}? This may incur charges.`
-      )
-    )
-      return;
+    if (!activeProject) return;
+    const choice = await confirmGeneration({
+      title: "Generate anchor",
+      message: "Generate a new anchor image from your prompt. This may incur charges.",
+      requirement: "image",
+    });
+    if (!choice) return;
     await enqueueGeneration(
       makeGenerationJob({
         project: activeProject,
-        provider: activeProvider,
+        provider: choice.provider,
+        imageModel: choice.model,
         prompt: `${prompt}\n\nArt direction: ${activeProject.anchorArtMode === "hd" ? "Detailed HD 2D art" : "Crisp pixel art"}, ${activeProject.anchorDirection ?? "front"} view. Transparent background. Preserve a clear readable silhouette.`,
         dimensions: normalizedCanvas(activeProject.size, activeProject.canvasSize),
         target: "anchor",
@@ -50,17 +63,7 @@ export function useGenerationActions({
   }
 
   async function generateAssetForCard(card: StudioCard) {
-    if (!activeProject || !activeProvider) return;
-    try {
-      await getProviderSecret(activeProvider.id);
-    } catch (error) {
-      setProviderMessage(error instanceof Error ? error.message : "Enter the provider API key before generating.");
-      setActiveView("settings");
-      setFoundationNotice(
-        "Add the API key to the selected provider. In browser mode it is kept for this session only."
-      );
-      return;
-    }
+    if (!activeProject) return;
     const dimensions = resolveCardCanvas(activeProject, card);
     const anchorKey = activeProject.anchorVersions?.find(
       (version) => version.id === (card.anchorVersionId ?? activeProject.anchorVersionId)
@@ -88,12 +91,22 @@ export function useGenerationActions({
             ? " The card's own reference image and the project anchor will guide the style."
             : " The card's own reference image will guide the style."
         : " The anchor image will define the character.";
-    if (
-      !window.confirm(
-        `Generate “${card.name}” with ${activeProvider.name} / ${activeProvider.imageModel ?? activeProvider.model}?${usingReference ? referenceNote : ""}${layerCount > 1 ? ` This generates ${layerCount} isolated layers from this prompt.` : ""} This sends the reference image to the provider and may incur charges.`
-      )
-    )
+    const choice = await confirmGeneration({
+      title: `Generate “${card.name}”`,
+      message: `Generate “${card.name}”.${usingReference ? referenceNote : ""}${layerCount > 1 ? ` This generates ${layerCount} isolated layers from this prompt.` : ""} This may incur charges.`,
+      requirement: usingReference ? "imageEdit" : "image",
+    });
+    if (!choice) return;
+    try {
+      await getProviderSecret(choice.provider.id);
+    } catch (error) {
+      setProviderMessage(error instanceof Error ? error.message : "Enter the provider API key before generating.");
+      setActiveView("settings");
+      setFoundationNotice(
+        "Add the API key to the selected provider. In browser mode it is kept for this session only."
+      );
       return;
+    }
     const variations = Math.max(1, Math.min(8, card.variationCount ?? 1));
     const batchId = makeId();
     const appliedSkill = card.skillSnapshot;
@@ -117,7 +130,8 @@ export function useGenerationActions({
           .replace(/\{layer\}|\[layer\]/gi, String(layer));
         const job = makeGenerationJob({
           project: activeProject,
-          provider: activeProvider,
+          provider: choice.provider,
+          imageModel: choice.model,
           card,
           prompt: layerPrompt + layerSuffix,
           dimensions,
@@ -136,29 +150,31 @@ export function useGenerationActions({
   }
 
   async function generateAnimationCard(card: StudioCard) {
-    if (!activeProject || !activeProvider) return;
+    if (!activeProject) return;
     const phases = card.phases ?? [];
+    const dimensions = { width: 2048, height: 256 };
+    const anchorVersionId = card.anchorVersionId ?? activeProject.anchorVersionId;
+    const referenceImageKey = activeProject.anchorVersions?.find((version) => version.id === anchorVersionId)?.imageKey;
+    if (!referenceImageKey) {
+      setFoundationNotice("Choose or upload a project anchor before generating animation frames.");
+      return;
+    }
+    const choice = await confirmGeneration({
+      title: `Generate animation for “${card.name}”`,
+      message:
+        "Generate one eight-frame animation sheet. Only the selected anchor is sent as the character reference. This may incur charges.",
+      requirement: "imageEdit",
+      actionLabel: "Generate animation",
+    });
+    if (!choice) return;
     try {
-      await getProviderSecret(activeProvider.id);
+      await getProviderSecret(choice.provider.id);
     } catch (error) {
       setProviderMessage(error instanceof Error ? error.message : "Enter the provider API key before generating.");
       setActiveView("settings");
       setFoundationNotice(
         "Add the API key to the selected provider. In browser mode it is kept for this session only."
       );
-      return;
-    }
-    if (
-      !window.confirm(
-        `Generate one eight-frame animation sheet for “${card.name}” with ${activeProvider.name}? Only the selected anchor is sent as the character reference. This may incur charges.`
-      )
-    )
-      return;
-    const dimensions = { width: 2048, height: 256 };
-    const anchorVersionId = card.anchorVersionId ?? activeProject.anchorVersionId;
-    const referenceImageKey = activeProject.anchorVersions?.find((version) => version.id === anchorVersionId)?.imageKey;
-    if (!referenceImageKey) {
-      setFoundationNotice("Choose or upload a project anchor before generating animation frames.");
       return;
     }
     const batchId = makeId();
@@ -195,7 +211,8 @@ export function useGenerationActions({
     await enqueueGeneration(
       makeGenerationJob({
         project: activeProject,
-        provider: activeProvider,
+        provider: choice.provider,
+        imageModel: choice.model,
         card,
         prompt,
         dimensions,
@@ -210,34 +227,36 @@ export function useGenerationActions({
   }
 
   async function generateInBetweenFrame(card: StudioCard, before: StudioFrame, after: StudioFrame) {
-    if (!activeProject || !activeProvider) return;
-    if (activeProvider.providerType !== "openai-compatible" || activeProvider.capabilities?.imageToImage === false) {
+    if (!activeProject) return;
+    const firstIndex = (card.frames ?? []).findIndex((frame) => frame.id === before.id);
+    const secondIndex = (card.frames ?? []).findIndex((frame) => frame.id === after.id);
+    const [earlier, later] = firstIndex <= secondIndex ? [before, after] : [after, before];
+    const choice = await confirmGeneration({
+      title: `Generate in-between for “${card.name}”`,
+      message: `Generate an in-between pose using “${earlier.name}” and “${later.name}” as references. This sends both frames to the provider and may incur charges.`,
+      requirement: "multiImage",
+      actionLabel: "Generate in-between",
+    });
+    if (!choice) return;
+    if (choice.provider.providerType !== "openai-compatible" || choice.provider.capabilities?.imageToImage === false) {
       setFoundationNotice(
         "In-between generation needs an OpenAI-compatible provider with image edits enabled, so it can use both selected frames as references."
       );
       return;
     }
     try {
-      await getProviderSecret(activeProvider.id);
+      await getProviderSecret(choice.provider.id);
     } catch (error) {
       setProviderMessage(error instanceof Error ? error.message : "Enter the provider API key before generating.");
       setActiveView("settings");
       setFoundationNotice("Add an image-edit capable provider and API key before generating in-between frames.");
       return;
     }
-    const firstIndex = (card.frames ?? []).findIndex((frame) => frame.id === before.id);
-    const secondIndex = (card.frames ?? []).findIndex((frame) => frame.id === after.id);
-    const [earlier, later] = firstIndex <= secondIndex ? [before, after] : [after, before];
-    if (
-      !window.confirm(
-        `Generate an in-between pose for “${card.name}” using “${earlier.name}” and “${later.name}” as references with ${activeProvider.name} / ${activeProvider.imageModel ?? activeProvider.model}? This sends both frames to the provider and may incur charges.`
-      )
-    )
-      return;
     const versionId = card.activeVersionId;
     const job = makeGenerationJob({
       project: activeProject,
-      provider: activeProvider,
+      provider: choice.provider,
+      imageModel: choice.model,
       card,
       prompt: `Create a single standalone animation frame for ${card.name}. OUTPUT EXACTLY ONE IMAGE WITH EXACTLY ONE CHARACTER POSE. This is one frame, not a sprite sheet, not a grid, not a storyboard, not a contact sheet, and not a collage. The first reference image is the pose immediately before the desired frame; the second reference is the pose immediately after it. Draw one new midpoint pose that smoothly bridges those two poses in the motion. Return only one complete character, one pose, filling one square frame. Do not divide the image into cells or panels. Do not show multiple versions, poses, or characters. Preserve the exact character identity, proportions, outfit, facing direction, palette, pixel-art style, scale, and ground line from the references. Use a transparent background. Do not add scenery, text, labels, borders, gutters, or extra content. Animation direction: ${card.prompt || "follow the established motion"}.`,
       dimensions: resolveCardCanvas(activeProject, card),
@@ -250,14 +269,22 @@ export function useGenerationActions({
     await enqueueGeneration(job);
   }
 
-  async function touchUpFrameWithAI(card: StudioCard, frame: StudioFrame, instruction: string) {
-    if (!activeProject || !activeProvider) return;
-    if (!activeProvider.capabilities?.imageToImage) {
+  async function touchUpFrameWithAI(
+    card: StudioCard,
+    frame: StudioFrame,
+    instruction: string,
+    override?: { provider: ProviderProfile; model: string }
+  ) {
+    if (!activeProject) return;
+    const provider = override?.provider ?? activeProvider;
+    if (!provider) return;
+    const model = override?.model ?? provider.imageModel ?? provider.model;
+    if (!provider.capabilities?.imageToImage) {
       setFoundationNotice("Enable image edits in provider settings or choose a provider with image-to-image support.");
       return;
     }
     try {
-      await getProviderSecret(activeProvider.id);
+      await getProviderSecret(provider.id);
     } catch (error) {
       setProviderMessage(error instanceof Error ? error.message : "Enter the provider API key before generating.");
       setActiveView("settings");
@@ -272,15 +299,10 @@ export function useGenerationActions({
       setFoundationNotice("The selected frame image could not be loaded from local storage.");
       return;
     }
-    if (
-      !window.confirm(
-        `Touch up “${frame.name}” from “${card.name}” with ${activeProvider.name} / ${activeProvider.imageModel ?? activeProvider.model}? This sends the frame to the provider and may incur charges. The original frame is kept; the edited copy can be reverted at any time.`
-      )
-    )
-      return;
     const job = makeGenerationJob({
       project: activeProject,
-      provider: activeProvider,
+      provider,
+      imageModel: model,
       card,
       prompt: `Edit the single input image, which is one animation frame of ${card.name}. Return exactly one edited version of this same frame. ${instruction.trim()}\n\nStrictly preserve the character identity, pose, silhouette, proportions, facing direction, palette, art style, scale, and ground position of the input frame. Change only what the instruction above asks for. Use a transparent background. Output exactly one image with exactly one character pose: no sprite sheet, grid, panels, text, labels, borders, scenery, or extra content.`,
       dimensions: resolveCardCanvas(activeProject, card),
@@ -355,11 +377,7 @@ export function useGenerationActions({
   }
 
   async function editAnchorImage(prompt: string) {
-    if (!activeProject || !activeProvider || !activeProject.anchorVersionId) return;
-    if (!activeProvider.capabilities?.imageToImage) {
-      setFoundationNotice("Enable image edits in provider settings or choose a provider with image-to-image support.");
-      return;
-    }
+    if (!activeProject || !activeProject.anchorVersionId) return;
     const currentVersion = activeProject.anchorVersions?.find(
       (version) => version.id === activeProject.anchorVersionId
     );
@@ -372,16 +390,22 @@ export function useGenerationActions({
       setFoundationNotice("The selected anchor image could not be loaded.");
       return;
     }
-    if (
-      !window.confirm(
-        `Create a new anchor version by editing the current anchor with ${activeProvider.name}? This may incur charges.`
-      )
-    )
+    const choice = await confirmGeneration({
+      title: "Edit anchor",
+      message: "Create a new anchor version by editing the current anchor. This may incur charges.",
+      requirement: "imageEdit",
+      actionLabel: "Edit anchor",
+    });
+    if (!choice) return;
+    if (!choice.provider.capabilities?.imageToImage) {
+      setFoundationNotice("Enable image edits in provider settings or choose a provider with image-to-image support.");
       return;
+    }
     const dimensions = normalizedCanvas(activeProject.size, activeProject.canvasSize);
     const job = makeGenerationJob({
       project: activeProject,
-      provider: activeProvider,
+      provider: choice.provider,
+      imageModel: choice.model,
       prompt,
       dimensions,
       target: "anchor",

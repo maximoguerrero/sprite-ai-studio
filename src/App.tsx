@@ -1,14 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { StudioProject } from "./types";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { ProviderProfile, StudioProject } from "./types";
 import { resolveCardCanvas } from "./productFoundation";
 import { imageModelFor } from "./openAIProvider";
 import { Sidebar, type AppView } from "./components/Sidebar";
 import { Topbar } from "./components/Topbar";
 import { Dialog } from "./components/Dialog";
+import { GenerationConfirmDialog } from "./components/GenerationConfirmDialog";
 import { ThemeSettings } from "./components/ThemeSettings";
 import { useThemePreferences } from "./hooks/useThemePreferences";
 import { useProviderSettings } from "./hooks/useProviderSettings";
-import { imageModelChoiceId, parseImageModelChoice, useImageModelCatalog } from "./hooks/useImageModelCatalog";
+import {
+  defaultImageModelChoice,
+  imageModelChoiceId,
+  parseImageModelChoice,
+  useImageModelCatalog,
+  type ImageModelRequirement,
+} from "./hooks/useImageModelCatalog";
 import { useSkillLibrary } from "./hooks/useSkillLibrary";
 import { useGenerationJobs } from "./hooks/useGenerationJobs";
 import { useCardActions } from "./hooks/useCardActions";
@@ -168,6 +175,28 @@ function App() {
     projectsRef,
   });
 
+  const [generationConfirm, setGenerationConfirm] = useState<{
+    title: string;
+    message: string;
+    requirement: ImageModelRequirement;
+    actionLabel?: string;
+    resolve: (choice: { provider: ProviderProfile; model: string } | null) => void;
+  } | null>(null);
+
+  const confirmGeneration = useCallback(
+    (options: { title?: string; message: string; requirement?: ImageModelRequirement; actionLabel?: string }) =>
+      new Promise<{ provider: ProviderProfile; model: string } | null>((resolve) => {
+        setGenerationConfirm({
+          title: options.title ?? "Confirm generation",
+          message: options.message,
+          requirement: options.requirement ?? "image",
+          ...(options.actionLabel ? { actionLabel: options.actionLabel } : {}),
+          resolve,
+        });
+      }),
+    []
+  );
+
   const {
     generateAnchor,
     generateAssetForCard,
@@ -183,6 +212,7 @@ function App() {
     setFoundationNotice,
     setProviderMessage,
     updateCard,
+    confirmGeneration,
     makeGenerationJob,
     enqueueGeneration,
   });
@@ -355,7 +385,18 @@ function App() {
                 onDeleteVideo={(video) => void deleteVideoClip(activeProject, activeCard, video)}
                 onGenerateInBetween={(before, after) => generateInBetweenFrame(activeCard, before, after)}
                 onRevertFrameEdit={(frame) => void revertFrameEdit(activeProject, activeCard, frame)}
-                onAiTouchUp={(frame, prompt) => void touchUpFrameWithAI(activeCard, frame, prompt)}
+                onAiTouchUp={(frame, prompt, choice) => {
+                  const parsed = parseImageModelChoice(choice);
+                  const profile = parsed ? providerProfiles.find((item) => item.id === parsed.profileId) : undefined;
+                  void touchUpFrameWithAI(
+                    activeCard,
+                    frame,
+                    prompt,
+                    profile && parsed ? { provider: profile, model: parsed.model } : undefined
+                  );
+                }}
+                imageModelGroups={imageModelCatalog.groups}
+                defaultImageModel={selectedImageModel}
                 onSelectVersion={(version) => selectAnimationVersion(activeProject.id, activeCard.id, version)}
                 onDeleteVersion={(version) => void deleteAnimationVersion(activeProject, activeCard, version)}
                 onDelete={() => void deleteCard(activeProject, activeCard)}
@@ -543,6 +584,30 @@ function App() {
       )}
       {projectExportOpen && activeProject && (
         <ProjectExportDialog project={activeProject} onClose={() => setProjectExportOpen(false)} />
+      )}
+      {generationConfirm && (
+        <GenerationConfirmDialog
+          title={generationConfirm.title}
+          message={generationConfirm.message}
+          groups={imageModelCatalog.groups}
+          requirement={generationConfirm.requirement}
+          defaultValue={defaultImageModelChoice(
+            imageModelCatalog.groups,
+            generationConfirm.requirement,
+            selectedImageModel
+          )}
+          {...(generationConfirm.actionLabel ? { actionLabel: generationConfirm.actionLabel } : {})}
+          onConfirm={(choiceId) => {
+            const parsed = parseImageModelChoice(choiceId);
+            const profile = parsed ? providerProfiles.find((item) => item.id === parsed.profileId) : undefined;
+            generationConfirm.resolve(profile && parsed ? { provider: profile, model: parsed.model } : null);
+            setGenerationConfirm(null);
+          }}
+          onCancel={() => {
+            generationConfirm.resolve(null);
+            setGenerationConfirm(null);
+          }}
+        />
       )}
     </div>
   );

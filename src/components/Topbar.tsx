@@ -1,5 +1,6 @@
 import type { AppView } from "./Sidebar";
 import type { ImageModelGroup } from "../hooks/useImageModelCatalog";
+import { ImageModelPicker } from "./ImageModelPicker";
 
 type TopbarProps = {
   activeView: AppView;
@@ -24,9 +25,6 @@ export function Topbar({
 }: TopbarProps) {
   const pageName =
     activeView === "skills" ? "Skills library" : activeView === "settings" ? "Settings" : (projectName ?? "Projects");
-  const isListed = imageModelGroups.some((group) =>
-    group.models.some((model) => `${group.profileId}::${model}` === selectedImageModel)
-  );
   return (
     <header className="topbar flex items-center justify-between">
       <div className="breadcrumbs">
@@ -37,32 +35,12 @@ export function Topbar({
       <div className="topbar-actions">
         <label className="model-picker">
           <span className={`provider-indicator ${providerConfigured ? "configured" : ""}`} />
-          <select
-            aria-label="Image model used for generation"
-            title="Pick the provider and image model used for generation"
+          <ImageModelPicker
+            groups={imageModelGroups}
             value={selectedImageModel}
-            onChange={(event) => onImageModelChange(event.target.value)}
-          >
-            {selectedImageModel && !isListed ? (
-              <option value={selectedImageModel}>{selectedImageModel.split("::")[1] ?? "Image model"}</option>
-            ) : null}
-            {imageModelGroups.map((group) => (
-              <optgroup key={group.profileId} label={group.profileName}>
-                {group.models.map((model) => (
-                  <option key={`${group.profileId}::${model}`} value={`${group.profileId}::${model}`}>
-                    {model}
-                  </option>
-                ))}
-                {group.loading && !group.models.length ? <option value="">Loading models…</option> : null}
-                {group.error ? (
-                  <option value="" disabled>
-                    ⚠ could not list models
-                  </option>
-                ) : null}
-              </optgroup>
-            ))}
-            {!imageModelGroups.length ? <option value="">No image provider configured</option> : null}
-          </select>
+            onChange={onImageModelChange}
+            title="Pick the provider and image model used for generation"
+          />
           <button
             type="button"
             className="model-refresh"

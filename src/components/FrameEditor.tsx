@@ -20,7 +20,9 @@ import { removeGreenScreen } from "../lib/imageUtils";
 import { makeId } from "../lib/ids";
 import { Dialog } from "./Dialog";
 import { FrameTouchUpEditor } from "./FrameTouchUpEditor";
+import { ImageModelPicker } from "./ImageModelPicker";
 import { PhasePlannerForm } from "./PhasePlannerForm";
+import { defaultImageModelChoice, imageModelChoiceIds, type ImageModelGroup } from "../hooks/useImageModelCatalog";
 
 type ExtractedVideoFrame = { time: number; blob: Blob; url: string };
 
@@ -43,6 +45,8 @@ export function FrameEditor({
   onGenerateInBetween,
   onRevertFrameEdit,
   onAiTouchUp,
+  imageModelGroups,
+  defaultImageModel,
   onSelectVersion,
   onDeleteVersion,
   onDelete,
@@ -61,7 +65,9 @@ export function FrameEditor({
   onDeleteVideo: (video: VideoVersion) => void;
   onGenerateInBetween: (before: StudioFrame, after: StudioFrame) => Promise<void>;
   onRevertFrameEdit: (frame: StudioFrame) => void;
-  onAiTouchUp: (frame: StudioFrame, prompt: string) => void;
+  onAiTouchUp: (frame: StudioFrame, prompt: string, modelChoice: string) => void;
+  imageModelGroups: ImageModelGroup[];
+  defaultImageModel: string;
   onSelectVersion: (version: AnimationVersion) => void;
   onDeleteVersion: (version: AnimationVersion) => void;
   onDelete: () => void;
@@ -138,6 +144,7 @@ export function FrameEditor({
   const [touchUpTarget, setTouchUpTarget] = useState<{ frameId: string; blob: Blob } | null>(null);
   const [aiTouchUpTarget, setAiTouchUpTarget] = useState<StudioFrame | null>(null);
   const [aiTouchUpPrompt, setAiTouchUpPrompt] = useState(DEFAULT_AI_TOUCH_UP_PROMPT);
+  const [aiTouchUpModel, setAiTouchUpModel] = useState(defaultImageModel);
   const [cardName, setCardName] = useState(card.name);
   const [editPrompt, setEditPrompt] = useState(card.prompt);
   const [editPhases, setEditPhases] = useState<AnimationPhase[]>(card.phases ?? []);
@@ -1238,37 +1245,61 @@ export function FrameEditor({
       ) : null}
       {aiTouchUpTarget ? (
         <Dialog title={`AI touch up “${aiTouchUpTarget.name}”`} onClose={() => setAiTouchUpTarget(null)}>
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              const instruction = aiTouchUpPrompt.trim();
-              if (instruction) onAiTouchUp(aiTouchUpTarget, instruction);
-              setAiTouchUpTarget(null);
-            }}
-          >
-            <label>
-              What should the model fix?
-              <textarea
-                autoFocus
-                rows={4}
-                value={aiTouchUpPrompt}
-                onChange={(event) => setAiTouchUpPrompt(event.target.value)}
-                required
-              />
-            </label>
-            <p className="storage-note">
-              The frame is sent to your image provider and may incur charges. The result is saved as an edited copy; the
-              original generated frame is kept and can be restored with revert.
-            </p>
-            <div className="dialog-actions">
-              <button className="button secondary" type="button" onClick={() => setAiTouchUpTarget(null)}>
-                Cancel
-              </button>
-              <button className="button primary" type="submit">
-                Send to provider
-              </button>
-            </div>
-          </form>
+          {(() => {
+            const capableChoices = imageModelChoiceIds(imageModelGroups, "imageEdit");
+            const canSubmit = Boolean(aiTouchUpPrompt.trim() && capableChoices.includes(aiTouchUpModel));
+            return (
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  const instruction = aiTouchUpPrompt.trim();
+                  if (instruction && capableChoices.includes(aiTouchUpModel))
+                    onAiTouchUp(aiTouchUpTarget, instruction, aiTouchUpModel);
+                  setAiTouchUpTarget(null);
+                }}
+              >
+                <label className="ai-touchup-model">
+                  Model
+                  <span>Pick the provider model for this touch-up. Only image-edit capable providers are listed.</span>
+                  <ImageModelPicker
+                    groups={imageModelGroups}
+                    value={aiTouchUpModel}
+                    onChange={setAiTouchUpModel}
+                    requirement="imageEdit"
+                    ariaLabel="Model used for this touch-up"
+                  />
+                </label>
+                {!capableChoices.length ? (
+                  <p className="storage-note">
+                    No configured provider supports image edits. Enable “Image edits/references” in provider settings,
+                    or add a provider with image-to-image support.
+                  </p>
+                ) : null}
+                <label>
+                  What should the model fix?
+                  <textarea
+                    autoFocus
+                    rows={4}
+                    value={aiTouchUpPrompt}
+                    onChange={(event) => setAiTouchUpPrompt(event.target.value)}
+                    required
+                  />
+                </label>
+                <p className="storage-note">
+                  The frame is sent to your image provider and may incur charges. The result is saved as an edited copy;
+                  the original generated frame is kept and can be restored with revert.
+                </p>
+                <div className="dialog-actions">
+                  <button className="button secondary" type="button" onClick={() => setAiTouchUpTarget(null)}>
+                    Cancel
+                  </button>
+                  <button className="button primary" type="submit" disabled={!canSubmit}>
+                    Send to provider
+                  </button>
+                </div>
+              </form>
+            );
+          })()}
         </Dialog>
       ) : null}
       <PhasePlannerForm
@@ -1791,7 +1822,11 @@ export function FrameEditor({
             <button
               className="button secondary frame-ai-touch-up"
               disabled={!activeFrame}
-              onClick={() => activeFrame && setAiTouchUpTarget(activeFrame)}
+              onClick={() => {
+                if (!activeFrame) return;
+                setAiTouchUpModel(defaultImageModelChoice(imageModelGroups, "imageEdit", defaultImageModel));
+                setAiTouchUpTarget(activeFrame);
+              }}
               title="Send the selected frame to the image model for an AI touch-up"
             >
               ✨ AI touch up

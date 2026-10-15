@@ -6,10 +6,20 @@ import { getProviderSecret } from "../providerSecrets";
 export type ImageModelGroup = {
   profileId: string;
   profileName: string;
+  providerType: NonNullable<ProviderProfile["providerType"]>;
   models: string[];
+  imageToImage: boolean;
   error?: string;
   loading: boolean;
 };
+
+export type ImageModelChoiceId = string;
+
+// What a generation needs from the chosen provider/model:
+// - "image": any enabled image provider (text-to-image).
+// - "imageEdit": a provider with image edits enabled (single reference).
+// - "multiImage": OpenAI-compatible + image edits (multiple reference images, e.g. in-between frames).
+export type ImageModelRequirement = "image" | "imageEdit" | "multiImage";
 
 export function imageModelChoiceId(profileId: string, model: string) {
   return `${profileId}::${model}`;
@@ -19,6 +29,34 @@ export function parseImageModelChoice(value: string) {
   const separator = value.indexOf("::");
   if (separator <= 0 || separator === value.length - 1) return null;
   return { profileId: value.slice(0, separator), model: value.slice(separator + 2) };
+}
+
+export function groupMeetsRequirement(group: ImageModelGroup, requirement: ImageModelRequirement) {
+  if (requirement === "image") return true;
+  if (!group.imageToImage) return false;
+  if (requirement === "multiImage") return group.providerType === "openai-compatible";
+  return true;
+}
+
+export function usableImageModelGroups(groups: ImageModelGroup[], requirement: ImageModelRequirement) {
+  return groups.filter((group) => groupMeetsRequirement(group, requirement));
+}
+
+export function imageModelChoiceIds(groups: ImageModelGroup[], requirement: ImageModelRequirement) {
+  return usableImageModelGroups(groups, requirement).flatMap((group) =>
+    group.models.map((model) => imageModelChoiceId(group.profileId, model))
+  );
+}
+
+// Prefer the current global selection when it satisfies the requirement, otherwise the first usable choice.
+export function defaultImageModelChoice(
+  groups: ImageModelGroup[],
+  requirement: ImageModelRequirement,
+  preferred?: string
+) {
+  const choices = imageModelChoiceIds(groups, requirement);
+  if (preferred && choices.includes(preferred)) return preferred;
+  return choices[0] ?? "";
 }
 
 type CatalogEntry = { models: string[]; error?: string };
@@ -86,7 +124,9 @@ export function useImageModelCatalog(providerProfiles: ProviderProfile[]) {
           return {
             profileId: profile.id,
             profileName: profile.name,
+            providerType: profile.providerType ?? "openai-compatible",
             models,
+            imageToImage: profile.capabilities?.imageToImage === true,
             ...(entry?.error ? { error: entry.error } : {}),
             loading: loadingProfileId === profile.id && !entry,
           };

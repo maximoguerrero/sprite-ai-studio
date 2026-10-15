@@ -199,6 +199,7 @@ export const generationJobSchema = z.object({
   cardId: z.string().optional(),
   status: z.enum(["queued", "running", "succeeded", "failed", "cancelled"]),
   providerProfileId: z.string().min(1),
+  imageModel: z.string().optional(),
   anchorVersionId: z.string().optional(),
   target: z.enum(["anchor", "asset", "animation-frame", "inbetween-frame", "frame-edit", "video-animation"]),
   frameIndex: z.number().int().nonnegative().optional(),
