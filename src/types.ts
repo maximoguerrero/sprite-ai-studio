@@ -9,15 +9,22 @@ export type CardKind = "animation" | "asset";
 export type StudioFrame = {
   id: string;
   imageKey: string;
+  editImageKey?: string;
   name: string;
   offsetX: number;
   offsetY: number;
+  scale?: number;
   pivotX: number;
   pivotY: number;
   durationMs: number;
   phaseId?: string;
   phaseIndex?: number;
 };
+
+/** Single source of truth for which stored image a frame currently shows. */
+export function activeFrameImageKey(frame: Pick<StudioFrame, "imageKey" | "editImageKey">): string {
+  return frame.editImageKey ?? frame.imageKey;
+}
 
 export type AnimationPhase = {
   id: string;
@@ -47,6 +54,14 @@ export type AssetVersion = {
   createdAt: string;
 };
 
+export type AssetLayer = {
+  id: string;
+  layerIndex: number;
+  imageKey: string;
+  prompt: string;
+  createdAt: string;
+};
+
 export type AssetPlacement = {
   scale: number;
   offsetX: number;
@@ -64,11 +79,11 @@ export type StudioCard = {
   prompt: string;
   archivedAt?: string;
   generatedImageKey?: string;
-  startPoseImageKey?: string;
   createdAt: string;
   size?: SpriteSize;
   canvasSize?: CanvasSize;
   frames?: StudioFrame[];
+  thumbnailFrameId?: string;
   frameCount?: number;
   fps?: number;
   loop?: boolean;
@@ -78,13 +93,30 @@ export type StudioCard = {
   versions?: AnimationVersion[];
   activeVersionId?: string;
   referenceImageKey?: string;
+  useAnchorReference?: boolean;
   artMode?: "pixel" | "hd";
   transparentBackground?: boolean;
   variationCount?: number;
+  layerCount?: number;
   assetVersions?: AssetVersion[];
+  assetLayers?: AssetLayer[];
   activeAssetVersionId?: string;
   assetPlacement?: AssetPlacement;
   assetCrop?: AssetCrop;
+  videoVersions?: VideoVersion[];
+  videoDuration?: number;
+  videoLoopPreset?: string;
+  videoPinLoop?: boolean;
+  videoSampleCount?: number;
+};
+
+export type VideoVersion = {
+  id: string;
+  imageKey: string;
+  prompt: string;
+  model: string;
+  duration: number;
+  createdAt: string;
 };
 
 export type StudioProject = {
@@ -136,6 +168,10 @@ export type GenerationRequest = {
   height: number;
   referenceAssetIds: string[];
   referenceImageKey?: string;
+  referenceImageKeys?: string[];
+  inBetweenFrames?: { beforeFrameId: string; afterFrameId: string };
+  frameEdit?: { frameId: string };
+  animationStrip?: boolean;
   transparentBackground: boolean;
   pixelArt: boolean;
 };
@@ -146,10 +182,14 @@ export type ProviderProfile = {
   id: string;
   name: string;
   providerType?: "openai-compatible" | "parley" | "grok";
+  modelKind?: "image" | "text" | "video";
   baseUrl: string;
   model: string;
+  imageModel?: string;
+  videoModel?: string;
   quality?: "low" | "medium" | "high" | "auto";
   apiKeyConfigured: boolean;
+  enabled?: boolean;
   capabilities?: {
     modelsList: boolean;
     textToImage: boolean;
@@ -166,7 +206,8 @@ export type GenerationJob = {
   providerProfileId: string;
   anchorVersionId?: string;
   status: GenerationStatus;
-  target: "anchor" | "asset" | "animation-frame";
+  target: "anchor" | "asset" | "animation-frame" | "inbetween-frame" | "frame-edit" | "video-animation";
+  video?: { model: string; duration: number; resolution?: string; lastFrameImageKey?: string };
   frameIndex?: number;
   phaseId?: string;
   batchId?: string;
@@ -178,6 +219,7 @@ export type GenerationJob = {
   error?: string;
   outputImageKey?: string;
   variationIndex?: number;
+  layerIndex?: number;
   skillSnapshot?: SavedSkill;
 };
 
@@ -245,8 +287,10 @@ export function parseCanvasSize(value: unknown): CanvasSize | null {
 export function isWorkspaceExport(value: unknown): value is WorkspaceExport {
   if (!value || typeof value !== "object") return false;
   const candidate = value as Partial<WorkspaceExport>;
-  return candidate.format === "sprite-studio-workspace/v1"
-    && Array.isArray(candidate.projects)
-    && Array.isArray(candidate.skills)
-    && Boolean(candidate.images && typeof candidate.images === "object");
+  return (
+    candidate.format === "sprite-studio-workspace/v1" &&
+    Array.isArray(candidate.projects) &&
+    Array.isArray(candidate.skills) &&
+    Boolean(candidate.images && typeof candidate.images === "object")
+  );
 }

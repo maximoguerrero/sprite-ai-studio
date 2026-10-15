@@ -7,11 +7,16 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "proxy": "node proxy/server.mjs",
     "check": "tsc -b --pretty",
-    "test:exports": "tsx --test src/spriteSheet.test.ts src/schemas.test.ts",
+    "test:exports": "tsx --test src/spriteSheet.test.ts src/schemas.test.ts src/animationSheet.test.ts src/lib/helpers.test.ts src/lib/frameTouchup.test.ts src/lib/imageReferences.test.ts src/lib/imageResponse.test.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "postbuild": "npm run format",
     "tauri": "tauri"
   },
   "dependencies": {
+    "@ark-ui/react": "^5.39.3",
     "@tauri-apps/api": "^2.12.2",
     "@tauri-apps/cli": "^2.12.1",
     "@tauri-apps/plugin-dialog": "^2.8.1",
@@ -30,6 +35,10 @@
     "@types/react-dom": "^18.3.5",
     "@types/upng-js": "^2.1.5",
     "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.6.1",
+    "postcss": "^8.5.29",
+    "prettier": "^3.9.10",
+    "tailwindcss": "^3.4.19",
     "tsx": "^4.23.15",
     "typescript": "~5.7.2",
     "vite": "^6.0.7"

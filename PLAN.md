@@ -73,9 +73,9 @@ Provider profile fields: display name, base URL, model ID, API key reference, an
 
 ```ts
 interface ImageProvider {
-  getCapabilities(): Promise<ProviderCapabilities>
-  generateImage(request: ImageGenerationRequest): Promise<GenerationJob>
-  poll(jobId: string): Promise<GenerationJobStatus>
+  getCapabilities(): Promise<ProviderCapabilities>;
+  generateImage(request: ImageGenerationRequest): Promise<GenerationJob>;
+  poll(jobId: string): Promise<GenerationJobStatus>;
 }
 ```
 

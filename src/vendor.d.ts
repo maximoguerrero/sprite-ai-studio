@@ -1,14 +1,21 @@
+/// <reference types="vite/client" />
+
 declare module "gifenc" {
   export type GifPalette = number[][];
   export type GifEncoder = {
-    writeFrame(index: Uint8Array, width: number, height: number, options: {
-      palette?: GifPalette;
-      transparent?: boolean;
-      transparentIndex?: number;
-      delay?: number;
-      repeat?: number;
-      dispose?: number;
-    }): void;
+    writeFrame(
+      index: Uint8Array,
+      width: number,
+      height: number,
+      options: {
+        palette?: GifPalette;
+        transparent?: boolean;
+        transparentIndex?: number;
+        delay?: number;
+        repeat?: number;
+        dispose?: number;
+      }
+    ): void;
     finish(): void;
     bytes(): Uint8Array;
   };

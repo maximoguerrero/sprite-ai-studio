@@ -8,7 +8,9 @@ function loadRememberedKeys(): Record<string, string> {
     if (!stored) return {};
     const parsed: unknown = JSON.parse(stored);
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
-    return Object.fromEntries(Object.entries(parsed).filter((entry): entry is [string, string] => typeof entry[1] === "string"));
+    return Object.fromEntries(
+      Object.entries(parsed).filter((entry): entry is [string, string] => typeof entry[1] === "string")
+    );
   } catch {
     return {};
   }
@@ -79,7 +81,8 @@ export async function getProviderSecret(profileId: string) {
   }
   const secret = sessionSecrets.get(profileId) ?? loadRememberedKeys()[profileId];
   if (secret) sessionSecrets.set(profileId, secret);
-  if (!secret) throw new Error("Enter the API key for this browser session. Browser mode does not persist provider keys.");
+  if (!secret)
+    throw new Error("Enter the API key for this browser session. Browser mode does not persist provider keys.");
   return secret;
 }
 

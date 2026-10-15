@@ -40,7 +40,9 @@ export async function loadWorkspace(): Promise<WorkspaceData | undefined> {
   database.close();
   if (!workspace) return undefined;
   if (workspace.schemaVersion === 1) return workspace;
-  throw new Error(`Unsupported workspace schema version: ${String((workspace as { schemaVersion?: unknown }).schemaVersion)}`);
+  throw new Error(
+    `Unsupported workspace schema version: ${String((workspace as { schemaVersion?: unknown }).schemaVersion)}`
+  );
 }
 
 export function saveWorkspace(workspace: WorkspaceData): Promise<void> {
@@ -63,26 +65,38 @@ export async function loadWorkspaceAndJobs(): Promise<{ workspace?: WorkspaceDat
     let workspace: WorkspaceData | undefined;
     let jobs: unknown[] = [];
     let remaining = 2;
-    const done = () => { remaining -= 1; if (!remaining) resolve({ workspace, jobs }); };
-    workspaceRequest.onsuccess = () => { workspace = workspaceRequest.result as WorkspaceData | undefined; done(); };
-    jobsRequest.onsuccess = () => { jobs = Array.isArray(jobsRequest.result) ? jobsRequest.result : []; done(); };
-    workspaceRequest.onerror = jobsRequest.onerror = () => reject(transaction.error ?? new Error("Could not load workspace data."));
+    const done = () => {
+      remaining -= 1;
+      if (!remaining) resolve({ workspace, jobs });
+    };
+    workspaceRequest.onsuccess = () => {
+      workspace = workspaceRequest.result as WorkspaceData | undefined;
+      done();
+    };
+    jobsRequest.onsuccess = () => {
+      jobs = Array.isArray(jobsRequest.result) ? jobsRequest.result : [];
+      done();
+    };
+    workspaceRequest.onerror = jobsRequest.onerror = () =>
+      reject(transaction.error ?? new Error("Could not load workspace data."));
   });
   database.close();
   return result;
 }
 
 export function saveGenerationJobs(jobs: unknown[]): Promise<void> {
-  workspaceWriteQueue = workspaceWriteQueue.catch(() => undefined).then(async () => {
-    const database = await openDatabase();
-    await new Promise<void>((resolve, reject) => {
-      const transaction = database.transaction(WORKSPACE_STORE, "readwrite");
-      transaction.objectStore(WORKSPACE_STORE).put(jobs, "generation-jobs");
-      transaction.oncomplete = () => resolve();
-      transaction.onerror = () => reject(transaction.error ?? new Error("Could not save generation queue."));
+  workspaceWriteQueue = workspaceWriteQueue
+    .catch(() => undefined)
+    .then(async () => {
+      const database = await openDatabase();
+      await new Promise<void>((resolve, reject) => {
+        const transaction = database.transaction(WORKSPACE_STORE, "readwrite");
+        transaction.objectStore(WORKSPACE_STORE).put(jobs, "generation-jobs");
+        transaction.oncomplete = () => resolve();
+        transaction.onerror = () => reject(transaction.error ?? new Error("Could not save generation queue."));
+      });
+      database.close();
     });
-    database.close();
-  });
   return workspaceWriteQueue;
 }
 
